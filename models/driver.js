@@ -15,6 +15,15 @@ module.exports = (sequelize, type) => {
       country: type.STRING,
       phoneNo: type.STRING,
       imageURl: type.STRING,
+      frontImageURl: type.STRING,
+      backImageURl: type.STRING,
+      cardName: type.STRING,
+      cardNumber: type.STRING,
+      csv: type.STRING,
+      expirayDate: type.STRING,
+      email: type.STRING,
+      password: type.STRING,
+      isActive: type.BOOLEAN
  
      
     });

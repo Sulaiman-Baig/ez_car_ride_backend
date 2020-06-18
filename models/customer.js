@@ -13,10 +13,14 @@ module.exports = (sequelize, type) => {
       longitude: type.STRING,
       city: type.STRING,
       country: type.STRING,
-      phoneNo: type.STRING,
-      imageURl: type.STRING,
- 
-     
+      phoneNo: type.STRING,      
+      cardName: type.STRING,
+      cardNumber: type.STRING,
+      csv: type.STRING,
+      expirayDate: type.STRING,
+      email: type.STRING,
+      password: type.STRING,
+      isActive: type.BOOLEAN    
     });
   };
   
