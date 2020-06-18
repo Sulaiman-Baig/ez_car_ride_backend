@@ -5,10 +5,7 @@ const sequelize = require("sequelize");
 const op = sequelize.Op;
 const jwt = require("jsonwebtoken");
 
-const {
-    User,
-    Employee,
-    Campus,
+const {    
     Customer
 } = require('../database/database');
 module.exports = {

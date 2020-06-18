@@ -1,54 +1,63 @@
 const http_status_codes = require('http-status-codes');
 const hashedpassword = require("password-hash");
-// const nodemailer = require("nodemailer");
+const nodemailer = require("nodemailer");
 const sequelize = require("sequelize");
 const op = sequelize.Op;
 const jwt = require("jsonwebtoken");
 
 const {
-    User,
-    Employee,
-    Campus
+    Driver
 } = require('../database/database');
 module.exports = {
 
-    async createUser(req, res, next) {
+    async createDriver(req, res, next) {
         try {
             const {
-                employeeId,
-                role,
-                username,
-                password,
-                is_active
+                firstName,
+                lastName,
+                address,
+                city,
+                country,
+                phoneNo,
+                imageURl,
+                frontImageURl,
+                backImageURl,
+                cardName,
+                cardNumber,
+                csv,
+                expirayDate,
+                email,
+                password
             } = req.body;
-            console.log(req.body);
 
-            const employee = await Employee.findOne({ where: { id: employeeId } });
-
-            User.findOne({
+            Driver.findOne({
                 where: {
-                    email: employee.personal_email
+                    email: email
                 }
-            }).then(isuserexist => {
-                if (isuserexist) {
-                    res.json({ message: "This Employee already has been converted into User" });
+            }).then(isDriverExist => {
+                if (isDriverExist) {
+                    res.json({ message: "This Driver already exists" });
                 } else {
-                    User.create({
-                        role: role,
-                        username: username,
-                        email: employee.personal_email,
+                    Driver.create({
+                        firstName: firstName,
+                        lastName: lastName,
+                        address: address,
+                        city: city,
+                        country: country,
+                        phoneNo: phoneNo,
+                        imageURl: imageURl,
+                        backImageURl: backImageURl,
+                        frontImageURl: frontImageURl,
+                        cardName: cardName,
+                        cardNumber: cardNumber,
+                        csv: csv,
+                        expirayDate: expirayDate,
                         password: hashedpassword.generate(password),
-                        is_active: is_active,
-                        employeeId: employeeId
+                        is_active: false,
+                        email: email
                     });
-                    Employee.update({
-                        isUser: true
-                    }, {
-                        where: {
-                            id: employee.id
-                        }
-                    });
-                    return res.status(http_status_codes.CREATED).json({ message: "User created successfully" });
+
+                    return res.status(http_status_codes.CREATED).json({ message: "Driver created successfully" });
                 }
             });
         } catch (err) {
@@ -58,20 +67,20 @@ module.exports = {
         }
     },
 
-    userSignin(req, res, next) {
-        User.findOne({
+    signinDriver(req, res, next) {
+        Driver.findOne({
             where: {
                 email: req.body.email
-            }, include: { model: Employee, attributes: ['id', 'full_name', 'image'], include: { model: Campus, attributes: ['id'] } }
-        }).then(isUserexist => {
-            if (isUserexist) {
+            }
+        }).then(isDriverExist => {
+            if (isDriverExist) {
                 const verify_password = hashedpassword.verify(
-                    req.body.password, isUserexist.password
+                    req.body.password, isDriverExist.password
                 );
                 if (verify_password) {
                     const token = jwt.sign({
                         email: req.body.email,
-                        userId: isUserexist.id
+                        driverId: isDriverExist.id
                     },
                         "very-long-string-for-secret", {
                         expiresIn: 3600
@@ -81,7 +90,7 @@ module.exports = {
                     res.json({
                         message: "successfully login",
                         accessToken: token,
-                        user: isUserexist
+                        user: isDriverExist
                     })
                 } else {
                     res.json({
@@ -100,88 +109,73 @@ module.exports = {
 
     async getbyId(req, res, next) {
         try {
-            const user = await User.findOne({ where: { id: req.params.id }, include: [{ all: true }] });
-            return res.status(http_status_codes.OK).json(user);
+            const driver = await Driver.findOne({ where: { id: req.params.id } });
+            return res.status(http_status_codes.OK).json(driver);
 
         } catch (error) {
             return res.status(http_status_codes.INTERNAL_SERVER_ERROR).json({
-                message: "Error occured in fetching single user"
+                message: "Error occured in fetching single driver"
             })
         }
     },
 
-    async getall(req, res, next) {
+    async getAll(req, res, next) {
         try {
-            const users = await User.findAll(
-                {
-                    where: { role: { [op.not]: 'owner' } },
-                    include: { model: Employee }
-                }
-            );
-            return res.status(http_status_codes.OK).json(users);
+            const drivers = await Driver.findAll();
+            return res.status(http_status_codes.OK).json(drivers);
         } catch (err) {
             return res.status(http_status_codes.INTERNAL_SERVER_ERROR).json({
-                message: "Error Occurd in Fetching All User"
-            });
-        }
-    },
-
-    async getallByCampus(req, res, next) {
-        try {
-            const users = await User.findAll({
-                include: {
-                    model: Employee,
-                    where: {
-                        [op.and]: [
-                            { designation: { [op.not]: 'owner' } },
-                            { campusId: req.params.campusId }
-                        ]
-                    },
-                }
-            });
-            return res.status(http_status_codes.OK).json(users);
-        } catch (err) {
-            return res.status(http_status_codes.INTERNAL_SERVER_ERROR).json({
-                message: "Error Occurd in Fetching All User"
-            });
-        }
-    },
-
-    async getAllUsersBadgesByCampus(req, res, next) {
-        try {
-            const users = await User.findAll({
-                include: {
-                    model: Employee,
-                    where: {
-                        [op.and]: [
-                            { designation: { [op.not]: 'owner' } },
-                            { campusId: req.params.campusId }
-                        ]
-                    },
-                },
-                attributes: ['id']
-            });
-            
-            return res.status(http_status_codes.OK).json(users.length);
-        } catch (err) {
-            return res.status(http_status_codes.INTERNAL_SERVER_ERROR).json({
-                message: "Error Occurd in Fetching  getAllUsersBadgesByCampus"
+                message: "Error Occurd in Fetching All drivers"
             });
         }
     },
 
 
 
-    async updateuser(req, res, next) {
+
+
+    async updateDriver(req, res, next) {
         try {
             id = req.params.id;
             const {
-                role,
-                username,
+                firstName,
+                lastName,
+                address,
+                city,
+                country,
+                phoneNo,
+
             } = req.body
-            User.update({
-                role: role,
-                username: username
+            Driver.update({
+                firstName: firstName,
+                lastName: lastName,
+                address: address,
+                city: city,
+                country: country,
+                phoneNo: phoneNo
+             }, {
+                where: {
+                    id: id
+                }
+            })
+            return res.status(http_status_codes.OK).json({
+                message: "Updated sussessfully"
+            })
+        } catch (error) {
+            return res.status(http_status_codes.INTERNAL_SERVER_ERROR).json({
+                message: "an error occured"
+            })
+        }
+    },
+
+    async updatePassword(req, res, next) {
+        try {
+            id = req.params.id;
+            const {
+                password
+            } = req.body
+            Driver.update({
+                password: hashedpassword.generate(password)
             }, {
                 where: {
                     id: id
@@ -197,45 +191,22 @@ module.exports = {
         }
     },
 
-    async updatepassword(req, res, next) {
+    async resetPassword(req, res, next) {
         try {
-            id = req.params.id;
-            const {
-                pass
-            } = req.body
-            User.update({
-                password: hashedpassword.generate(pass)
-            }, {
-                where: {
-                    id: id
-                }
-            })
-            return res.status(http_status_codes.OK).json({
-                message: "Updated sussessfully"
-            })
-        } catch (error) {
-            return res.status(http_status_codes.INTERNAL_SERVER_ERROR).json({
-                message: "an error occured"
-            })
-        }
-    },
-
-    async resetpassword(req, res, next) {
-        try {
-            const reqUserId = req.params.id;
+            const driverId = req.params.id;
             const oldpassword = req.body.oldpassword;
             const newpassword = req.body.newpassword;
-            User.findOne({
-                where: { id: reqUserId }
+            Driver.findOne({
+                where: { id: driverId }
             })
-                .then((fetchedUser) => {
+                .then((driver) => {
                     const isAuth = hashedpassword.verify(
                         oldpassword,
-                        fetchedUser.password
+                        driver.password
                     );
                     if (isAuth) {
-                        console.log(isAuth)
-                        fetchedUser.update({
+
+                        driver.update({
                             password: hashedpassword.generate(newpassword)
                         })
                             .then(() => {
@@ -247,61 +218,54 @@ module.exports = {
                 })
         } catch (error) {
             return res.status(http_status_codes.INTERNAL_SERVER_ERROR).json({
-                message: "Error Occurd in Fetching All Approved"
+                message: "Error Occurd in reseting password"
             });
         }
     },
 
-    // async resetpassword_usingmail(req, res, next) {
-    //     const reqData = req.body;
-    //     console.log(reqData);
+    async resetpassword_usingmail(req, res, next) {
+        const reqData = req.body;
 
-    //     User.findOne({
-    //         where: { email: reqData.email }
-    //     }).then(isadmin => {
-    //         if (isadmin) {
-    //             // send email
+        Driver.findOne({
+            where: { email: reqData.email }
+        }).then(isDriver => {
+            if (isDriver) {
+                // send email
 
-    //             var usermail = req.body.email;
-    //             var transporter = nodemailer.createTransport({
-    //                 service: 'gmail',
-    //                 auth: {
-    //                     user: 'Testermail018@gmail.com',
-    //                     pass: 'imrankamboh'
-    //                 }
-    //             });
-    //             var mailOptions = {
-    //                 from: ' ', // sender address
-    //                 to: usermail, // list of receivers
-    //                 subject: 'Admin Password Verification Code', // Subject line
-    //                 text: 'Hi', // plain text body
-    //                 html: 'Hi Admin<br>Please verify your email using the link below and get started building apps today! <b style="font-size:24px;margin-left:30px"> Your code - ' + (isUser.id) * 109786 + '<b>' // html body
+                var drivermail = req.body.email;
+                var transporter = nodemailer.createTransport({
+                    service: 'gmail',
+                    auth: {
+                        user: 'Testermail018@gmail.com',
+                        pass: 'kih76'
+                    }
+                });
+                var mailOptions = {
+                    from: ' ', // sender address
+                    to: drivermail, // list of receivers
+                    subject: 'Driver Password Verification Code', // Subject line
+                    text: 'Hi', // plain text body
+                    html: 'Hi Driver<br>Please verify your email using the link below <b style="font-size:24px;margin-left:30px"> Your code - ' + (isDriver.id) * 109786 + '<b>' // html body
 
-    //             };
+                };
 
-    //             transporter.sendMail(mailOptions, function (error, info) {
-    //                 if (error) {
-    //                     console.log(error);
-    //                 } else {
-    //                     res.json({
-    //                         manager: isadmin,
-    //                         verificationCode: (isUser.id) * 109786
-    //                     });
-
-    //                 }
-    //             });
-
-
-    //         } else {
-    //             res.json({ message: "Email does not exit" });
-    //         }
-    //     }).catch(err => {
-    //         console.log(err);
-    //         res.json("Some Error Occured!");
-    //     });
-    // }
-
-
-
+                transporter.sendMail(mailOptions, function (error, info) {
+                    if (error) {
+                        console.log(error);
+                    } else {
+                        res.json({
+                            driver: isDriver,
+                            verificationCode: (isUser.id) * 109786
+                        });
+                    }
+                });
+            } else {
+                res.json({ message: "Email does not exit" });
+            }
+        }).catch(err => {
+            console.log(err);
+            res.json("Some Error Occured!");
+        });
+    }
 
 };
