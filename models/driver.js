@@ -23,7 +23,8 @@ module.exports = (sequelize, type) => {
       expirayDate: type.STRING,
       email: type.STRING,
       password: type.STRING,
-      isActive: type.BOOLEAN
+      isActive: type.BOOLEAN,
+      isApproved: type.BOOLEAN,
  
      
     });

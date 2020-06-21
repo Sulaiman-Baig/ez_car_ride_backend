@@ -6,78 +6,60 @@ const op = sequelize.Op;
 const jwt = require("jsonwebtoken");
 
 const {    
-    Customer
+    Admin
 } = require('../database/database');
 module.exports = {
 
-    async createCustomer(req, res, next) {
+    async createAdmin(req, res, next) {
         try {
             const {
-                firstName,
-                lastName,
-                address,
-                city,
-                country,
-                phoneNo,
-                cardName,
-                cardNumber,
-                csv,
-                expirayDate,
+                userName,                
                 email,
                 password,
 
             } = req.body;
-         
+           
 
-            Customer.findOne({
+            Admin.findOne({
                 where: {
                     email: email
                 }
-            }).then(isCustomerExist => {
-                if (isCustomerExist) {
-                    res.json({ message: "This Customer already exists" });
+            }).then(isAdminExist => {
+                if (isAdminExist) {
+                    res.json({ message: "This Admin already exists" });
                 } else {
                    
-                    Customer.create({
-                        firstName: firstName,
-                        lastName: lastName,
-                        address: address,
-                        city: city,
-                        country: country,
-                        phoneNo: phoneNo,
-                        cardName: cardName,
-                        cardNumber: cardNumber,
-                        csv: csv,
-                        expirayDate: expirayDate,
+                    Admin.create({
+                        userName: userName,
                         password: hashedpassword.generate(password),
                         email: email,
-                        isActive: false
+                        isSuperAdmin: false
                     });
 
-                    return res.status(http_status_codes.CREATED).json({ message: "User created successfully" });
+                    return res.status(http_status_codes.CREATED).json({ message: "Admin created successfully" });
                 }
             });
         } catch (err) {
             return res.status(http_status_codes.INTERNAL_SERVER_ERROR).json({
-                message: "Error Occurd in Creating Customer"
+                message: "Error Occurd in Creating Admin"
             });
         }
     },
 
-    signInCustomer(req, res, next) {
-        Customer.findOne({
+    signInAdmin(req, res, next) {
+        Admin.findOne({
             where: {
                 email: req.body.email
             }
-        }).then(isCustomerExist => {
-            if (isCustomerExist) {
+        }).then(isAdminExist => {
+            if (isAdminExist) {
                 const verify_password = hashedpassword.verify(
-                    req.body.password, isCustomerExist.password
+                    req.body.password, isAdminExist.password
                 );
                 if (verify_password) {
                     const token = jwt.sign({
                         email: req.body.email,
-                        customerId: isCustomerExist.id
+                        adminId: isAdminExist.id
                     },
                         "very-long-string-for-secret", {
                         expiresIn: 3600
@@ -87,7 +69,7 @@ module.exports = {
                     res.json({
                         message: "successfully login",
                         accessToken: token,
-                        customer: isCustomerExist
+                        admin: isAdminExist
                     })
                 } else {
                     res.json({
@@ -106,52 +88,42 @@ module.exports = {
 
     async getbyId(req, res, next) {
         try {
-            const customer = await Customer.findOne({ where: { id: req.params.id } });
-            return res.status(http_status_codes.OK).json(customer);
+            const admin = await Admin.findOne({ where: { id: req.params.id } });
+            return res.status(http_status_codes.OK).json(admin);
 
         } catch (error) {
             return res.status(http_status_codes.INTERNAL_SERVER_ERROR).json({
-                message: "Error occured in fetching single user"
+                message: "Error occured in fetching single admin"
             })
         }
     },
 
     async getAll(req, res, next) {
         try {
-            const customers = await Customer.findAll();
-            return res.status(http_status_codes.OK).json(customers);
+            const admins = await Admin.findAll();
+            return res.status(http_status_codes.OK).json(admins);
         } catch (err) {
             return res.status(http_status_codes.INTERNAL_SERVER_ERROR).json({
-                message: "Error Occurd in Fetching All Customers"
+                message: "Error Occurd in Fetching All Admins"
             });
         }
     },
 
-    async updateCustomer(req, res, next) {
+    async updateAdmin(req, res, next) {
         try {
             id = req.params.id;
             const {
-                firstName,
-                lastName,
-                address,
-                city,
-                country,
-                phoneNo
+                userName
             } = req.body
-            Customer.update({
-                firstName: firstName,
-                lastName: lastName,
-                address: address,
-                city: city,
-                country: country,
-                phoneNo: phoneNo
+            Admin.update({
+                userName: userName
             }, {
                 where: {
                     id: id
                 }
             })
             return res.status(http_status_codes.OK).json({
-                message: "Updated sussessfully"
+                message: "Updated successfully"
             })
         } catch (error) {
             return res.status(http_status_codes.INTERNAL_SERVER_ERROR).json({
@@ -166,7 +138,7 @@ module.exports = {
             const {
                 password
             } = req.body
-            Customer.update({
+            Admin.update({
                 password: hashedpassword.generate(password)
             }, {
                 where: {
@@ -174,7 +146,7 @@ module.exports = {
                 }
             })
             return res.status(http_status_codes.OK).json({
-                message: "Updated sussessfully"
+                message: "Updated successfully"
             })
         } catch (error) {
             return res.status(http_status_codes.INTERNAL_SERVER_ERROR).json({
@@ -185,20 +157,20 @@ module.exports = {
 
     async resetPassword(req, res, next) {
         try {
-            const customerId = req.params.id;
+            const adminId = req.params.id;
             const oldpassword = req.body.oldpassword;
             const newpassword = req.body.newpassword;
-            Customer.findOne({
-                where: { id: customerId }
+            Admin.findOne({
+                where: { id: adminId }
             })
-                .then((isCustomer) => {
+                .then((isAdmin) => {
                     const isAuth = hashedpassword.verify(
                         oldpassword,
-                        isCustomer.password
+                        isAdmin.password
                     );
                     if (isAuth) {
-                        // console.log(isAuth)
-                        isCustomer.update({
+                   
+                        isAdmin.update({
                             password: hashedpassword.generate(newpassword)
                         })
                             .then(() => {
@@ -217,13 +189,13 @@ module.exports = {
 
     async resetpassword_usingmail(req, res, next) {
         const reqData = req.body;
-        Customer.findOne({
+        Admin.findOne({
             where: { email: reqData.email }
-        }).then(isCustomer => {
-            if (isadmin) {
+        }).then(isAdmin => {
+            if (isAdmin) {
                 // send email
 
-                var customermail = req.body.email;
+                var adminmail = req.body.email;
                 var transporter = nodemailer.createTransport({
                     service: 'gmail',
                     auth: {
@@ -233,10 +205,10 @@ module.exports = {
                 });
                 var mailOptions = {
                     from: ' ', // sender address
-                    to: customermail, // list of receivers
+                    to: adminmail, // list of receivers
                     subject: 'Admin Password Verification Code', // Subject line
                     text: 'Hi', // plain text body
-                    html: 'Dear customer<br>Please verify your email using the link below. <b style="font-size:24px;margin-left:30px"> Your code - ' + (isCustomer.id) * 109786 + '<b>' // html body
+                    html: 'Dear Admin<br>Please verify your email using the link below. <b style="font-size:24px;margin-left:30px"> Your code - ' + (isAdmin.id) * 109786 + '<b>' // html body
 
                 };
 
@@ -245,8 +217,8 @@ module.exports = {
                         console.log(error);
                     } else {
                         res.json({
-                            manager: isadmin,
-                            verificationCode: (isCustomer.id) * 109786
+                            manager: isAdmin,
+                            verificationCode: (isAdmin.id) * 109786
                         });
                     }
                 });
