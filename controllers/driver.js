@@ -25,7 +25,8 @@ module.exports = {
                 cardName,
                 cardNumber,
                 csv,
-                expirayDate,
+                expirayYear,
+                expirayMonth,
                 email,
                 password
             } = req.body;
@@ -51,7 +52,8 @@ module.exports = {
                         cardName: cardName,
                         cardNumber: cardNumber,
                         csv: csv,
-                        expirayDate: expirayDate,
+                        expirayYear: expirayYear,
+                        expirayMonth: expirayMonth,
                         password: hashedpassword.generate(password),
                         is_active: false,
                         email: email

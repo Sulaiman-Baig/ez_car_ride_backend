@@ -17,7 +17,8 @@ module.exports = (sequelize, type) => {
       cardName: type.STRING,
       cardNumber: type.STRING,
       csv: type.STRING,
-      expirayDate: type.STRING,
+      expirayYear: type.STRING,
+      expirayMonth: type.STRING,
       email: type.STRING,
       password: type.STRING,
       isActive: type.BOOLEAN    

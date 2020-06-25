@@ -22,7 +22,8 @@ module.exports = {
                 cardName,
                 cardNumber,
                 csv,
-                expirayDate,
+                expirayYear,
+                expirayMonth,
                 email,
                 password,
 
@@ -48,7 +49,8 @@ module.exports = {
                         cardName: cardName,
                         cardNumber: cardNumber,
                         csv: csv,
-                        expirayDate: expirayDate,
+                        expirayYear: expirayYear,
+                        expirayMonth: expirayMonth,
                         password: hashedpassword.generate(password),
                         email: email,
                         isActive: false
