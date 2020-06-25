@@ -10,7 +10,8 @@ module.exports = (sequelize, type) => {
       userName: type.STRING,
       email: type.STRING,
       password: type.STRING,
-      isSuperAdmin: type.BOOLEAN
+      isSuperAdmin: type.BOOLEAN,
+      isApproved: type.BOOLEAN,
  
      
     });

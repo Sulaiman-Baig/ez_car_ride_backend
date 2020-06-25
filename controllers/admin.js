@@ -5,7 +5,7 @@ const sequelize = require("sequelize");
 const op = sequelize.Op;
 const jwt = require("jsonwebtoken");
 
-const {    
+const {
     Admin
 } = require('../database/database');
 module.exports = {
@@ -13,30 +13,47 @@ module.exports = {
     async createAdmin(req, res, next) {
         try {
             const {
-                userName,                
+                userName,
                 email,
                 password,
 
             } = req.body;
-           
+
 
             Admin.findOne({
                 where: {
-                    email: email
-                }
+                    [op.or]:
+                        [
+                            { email: email },
+                            { userName: 'ezcarsuperadmin' }
+                        ]
+                },
             }).then(isAdminExist => {
                 if (isAdminExist) {
                     res.json({ message: "This Admin already exists" });
                 } else {
-                   
-                    Admin.create({
-                        userName: userName,
-                        password: hashedpassword.generate(password),
-                        email: email,
-                        isSuperAdmin: false
-                    });
 
-                    return res.status(http_status_codes.CREATED).json({ message: "Admin created successfully" });
+                    if (userName === 'ezcarsuperadmin') {
+                        Admin.create({
+                            userName: userName,
+                            password: hashedpassword.generate(password),
+                            email: email,
+                            isSuperAdmin: true,
+                            isApproved: true
+                        });
+                        return res.status(http_status_codes.CREATED).json({ message: " Super Admin created successfully" });
+
+                    } else {
+
+                        Admin.create({
+                            userName: userName,
+                            password: hashedpassword.generate(password),
+                            email: email,
+                            isSuperAdmin: false,
+                            isApproved: false
+                        });
+                        return res.status(http_status_codes.CREATED).json({ message: "Admin created successfully" });
+                    }
                 }
             });
         } catch (err) {
@@ -132,6 +149,90 @@ module.exports = {
         }
     },
 
+    async approveAdmin(req, res, next) {
+        try {
+            id = req.params.id;
+           
+            Admin.update({
+                isApproved: true
+            }, {
+                where: {
+                    id: id
+                }
+            })
+            return res.status(http_status_codes.OK).json({
+                message: "Approved successfully"
+            })
+        } catch (error) {
+            return res.status(http_status_codes.INTERNAL_SERVER_ERROR).json({
+                message: "an error occured"
+            })
+        }
+    },
+
+    async disapproveAdmin(req, res, next) {
+        try {
+            id = req.params.id;
+           
+            Admin.update({
+                isApproved: false
+            }, {
+                where: {
+                    id: id
+                }
+            })
+            return res.status(http_status_codes.OK).json({
+                message: "Disapproved successfully"
+            })
+        } catch (error) {
+            return res.status(http_status_codes.INTERNAL_SERVER_ERROR).json({
+                message: "an error occured"
+            })
+        }
+    },
+
+    async superadminToAdmin(req, res, next) {
+        try {
+            id = req.params.id;
+           
+            Admin.update({
+                isSuperAdmin: false
+            }, {
+                where: {
+                    id: id
+                }
+            })
+            return res.status(http_status_codes.OK).json({
+                message: "Converted to Admin successfully"
+            })
+        } catch (error) {
+            return res.status(http_status_codes.INTERNAL_SERVER_ERROR).json({
+                message: "an error occured"
+            })
+        }
+    },
+
+    async adminToSuperAdmin(req, res, next) {
+        try {
+            id = req.params.id;
+           
+            Admin.update({
+                isSuperAdmin: true
+            }, {
+                where: {
+                    id: id
+                }
+            })
+            return res.status(http_status_codes.OK).json({
+                message: "Converted to SuperAdmin successfully"
+            })
+        } catch (error) {
+            return res.status(http_status_codes.INTERNAL_SERVER_ERROR).json({
+                message: "an error occured"
+            })
+        }
+    },
+
     async updatePassword(req, res, next) {
         try {
             id = req.params.id;
@@ -169,7 +270,7 @@ module.exports = {
                         isAdmin.password
                     );
                     if (isAuth) {
-                   
+
                         isAdmin.update({
                             password: hashedpassword.generate(newpassword)
                         })
