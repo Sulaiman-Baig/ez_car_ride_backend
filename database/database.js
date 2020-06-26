@@ -6,6 +6,7 @@ const Sequelize = require('sequelize');
 const AdminModel = require("../models/admin");
 const CustomerModel = require("../models/customer");
 const DriverModel = require("../models/driver");
+const VehicleModel = require("../models/vehicle");
 
 
 // SEQUELIZE CONNECTION
@@ -27,13 +28,15 @@ const sequelize = new Sequelize("ez_car_ride", "root", "root1234", {
 const Admin = AdminModel(sequelize, Sequelize);
 const Customer = CustomerModel(sequelize, Sequelize);
 const Driver = DriverModel(sequelize, Sequelize);
+const Vehicle = VehicleModel(sequelize, Sequelize);
 
 
 
 
 //  RELATIONS
 
-
+Vehicle.belongsTo(Driver);
+Driver.hasMany(Vehicle);
 
 //TO UPDATE SCHEMA
 
@@ -48,6 +51,7 @@ const Driver = DriverModel(sequelize, Sequelize);
 module.exports = {
     Admin,
     Customer,
-    Driver  
+    Driver,
+    Vehicle
 
 }; 
