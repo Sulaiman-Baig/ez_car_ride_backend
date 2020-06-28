@@ -12,9 +12,10 @@ module.exports = {
                 carModel,
                 carYear,
                 carSize,
-                carNumberPlate
+                carNumberPlate,
+                driverId
             } = req.body;   
-            driverId = req.params.driverId;        
+                 
             const vehicle = await Vehicle.create({
                 carName: carName,
                 carModel: carModel,
