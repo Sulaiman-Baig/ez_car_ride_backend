@@ -46,7 +46,7 @@ module.exports = {
                     res.json({ message: "This Driver already exists" });
                 } else {
 
-                    const driver = Driver.create({
+                    Driver.create({
                         firstName: firstName,
                         lastName: lastName,
                         address: address,
@@ -64,22 +64,21 @@ module.exports = {
                         password: hashedpassword.generate(password),
                         is_active: false,
                         email: email
+                    })
+                        .then((driver) => {
+                            Vehicle.create({
+                                carName: carName,
+                                carModel: carModel,
+                                carYear: carYear,
+                                carSize: carSize,
+                                carNumberPlate: carNumberPlate,
+                                driverId: driver.id
+                            })
+                                .then(() => {
+                                    return res.status(http_status_codes.CREATED).json({ message: 'Driver is Created and his Car is registered Successfully' });
 
-                    });
-
-                    if (driver) {
-                        console.log(driver);
-                        const vehicle = Vehicle.create({
-                            carName: carName,
-                            carModel: carModel,
-                            carYear: carYear,
-                            carSize: carSize,
-                            carNumberPlate: carNumberPlate,
-                            driverId: driver.id
-                        });
-                    }
-
-                    return res.status(http_status_codes.CREATED).json({ message: 'Driver is Created and his Car is registered Successfully' });
+                                })
+                        })
                 }
             });
         } catch (err) {
