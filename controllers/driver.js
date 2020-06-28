@@ -68,7 +68,8 @@ module.exports = {
                     });
 
                     if (driver) {
-                        const vehicle =  Vehicle.create({
+                        console.log(driver);
+                        const vehicle = Vehicle.create({
                             carName: carName,
                             carModel: carModel,
                             carYear: carYear,
@@ -133,6 +134,25 @@ module.exports = {
             const driver = await Driver.findOne({ where: { id: req.params.id } });
             return res.status(http_status_codes.OK).json(driver);
 
+        } catch (error) {
+            return res.status(http_status_codes.INTERNAL_SERVER_ERROR).json({
+                message: "Error occured in fetching single driver"
+            })
+        }
+    },
+
+    async isDriverExistByEmail(req, res, next) {
+        try {
+            const {
+                email
+            } = req.body;
+
+            const driver = await Driver.findOne({ where: { email: email } });
+            if (driver) {
+                return res.status(http_status_codes.OK).json({ message: 'Driver exists with this email', isExist: true });
+            } else {
+                return res.status(http_status_codes.OK).json({ message: 'Driver does not exist with this email', isExist: false });
+            }
         } catch (error) {
             return res.status(http_status_codes.INTERNAL_SERVER_ERROR).json({
                 message: "Error occured in fetching single driver"
