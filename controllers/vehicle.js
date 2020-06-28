@@ -23,7 +23,7 @@ module.exports = {
                 carNumberPlate: carNumberPlate,
                 driverId: driverId
             });
-            return res.status(http_status_codes.CREATED).json({message: 'Vehicle Created Successfully'});
+            return res.status(http_status_codes.CREATED).json(vehicle);
         } catch (err) {
             return res.status(http_status_codes.INTERNAL_SERVER_ERROR).json({
                 message: "Error Occurd in Creating Vehicle"
