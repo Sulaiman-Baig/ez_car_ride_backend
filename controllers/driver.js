@@ -59,7 +59,7 @@ module.exports = {
                         email: email
                     });
 
-                    return res.status(http_status_codes.CREATED).json(driver);
+                    return res.status(http_status_codes.CREATED).json({message: 'Driver Created Successfully', id: driver.id});
                 }
             });
         } catch (err) {
