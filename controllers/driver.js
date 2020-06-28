@@ -6,7 +6,8 @@ const op = sequelize.Op;
 const jwt = require("jsonwebtoken");
 
 const {
-    Driver
+    Driver,
+    Vehicle
 } = require('../database/database');
 module.exports = {
 
@@ -28,7 +29,12 @@ module.exports = {
                 expirayYear,
                 expirayMonth,
                 email,
-                password
+                password,
+                carName,
+                carModel,
+                carYear,
+                carSize,
+                carNumberPlate,
             } = req.body;
 
             Driver.findOne({
@@ -39,7 +45,8 @@ module.exports = {
                 if (isDriverExist) {
                     res.json({ message: "This Driver already exists" });
                 } else {
-                   const driver = await Driver.create({
+
+                    const driver = Driver.create({
                         firstName: firstName,
                         lastName: lastName,
                         address: address,
@@ -57,9 +64,21 @@ module.exports = {
                         password: hashedpassword.generate(password),
                         is_active: false,
                         email: email
+
                     });
 
-                    return res.status(http_status_codes.CREATED).json({message: 'Driver Created Successfully', id: driver.id});
+                    if (driver) {
+                        const vehicle =  Vehicle.create({
+                            carName: carName,
+                            carModel: carModel,
+                            carYear: carYear,
+                            carSize: carSize,
+                            carNumberPlate: carNumberPlate,
+                            driverId: driver.id
+                        });
+                    }
+
+                    return res.status(http_status_codes.CREATED).json({ message: 'Driver is Created and his Car is registered Successfully' });
                 }
             });
         } catch (err) {
@@ -155,7 +174,7 @@ module.exports = {
                 city: city,
                 country: country,
                 phoneNo: phoneNo
-             }, {
+            }, {
                 where: {
                     id: id
                 }
