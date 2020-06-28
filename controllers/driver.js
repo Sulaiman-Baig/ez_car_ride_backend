@@ -39,7 +39,7 @@ module.exports = {
                 if (isDriverExist) {
                     res.json({ message: "This Driver already exists" });
                 } else {
-                    Driver.create({
+                   const driver = await Driver.create({
                         firstName: firstName,
                         lastName: lastName,
                         address: address,
@@ -59,7 +59,7 @@ module.exports = {
                         email: email
                     });
 
-                    return res.status(http_status_codes.CREATED).json({ message: "Driver created successfully" });
+                    return res.status(http_status_codes.CREATED).json(driver);
                 }
             });
         } catch (err) {
