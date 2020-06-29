@@ -10,6 +10,7 @@ router.post('/update/:id', customerController.updateCustomer);
  router.post('/resetpassword/:id' , customerController.resetPassword);
  router.post('/mailsend' , customerController.resetpassword_usingmail);
  router.get('/getbyId/:id' , customerController.getbyId);
+ router.post('/is-customer-exist-by-email' , customerController.isCustomerExistByEmail);
  router.get('/getall' , customerController.getAll);
 
 module.exports = router;

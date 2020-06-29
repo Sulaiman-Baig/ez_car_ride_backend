@@ -118,6 +118,25 @@ module.exports = {
         }
     },
 
+    async isCustomerExistByEmail(req, res, next) {
+        try {
+            const {
+                email
+            } = req.body;
+
+            const customer = await Customer.findOne({ where: { email: email } });
+            if (customer) {
+                return res.status(http_status_codes.OK).json({ message: 'Customer exists with this email', isExist: true });
+            } else {
+                return res.status(http_status_codes.OK).json({ message: 'Customer does not exist with this email', isExist: false });
+            }
+        } catch (error) {
+            return res.status(http_status_codes.INTERNAL_SERVER_ERROR).json({
+                message: "Error occured in checking customer"
+            })
+        }
+    },
+
     async getAll(req, res, next) {
         try {
             const customers = await Customer.findAll();
