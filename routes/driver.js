@@ -10,7 +10,7 @@ router.post('/update/:id', driverController.updateDriver);
  router.post('/resetpassword/:id' , driverController.resetPassword);
  router.post('/mailsend' , driverController.resetpassword_usingmail);
  router.get('/getbyId/:id' , driverController.getbyId);
- router.get('/is-driver-exist-by-email' , driverController.isDriverExistByEmail);
+ router.post('/is-driver-exist-by-email' , driverController.isDriverExistByEmail);
  router.get('/getall' , driverController.getAll);
 
 module.exports = router;
