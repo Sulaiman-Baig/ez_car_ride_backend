@@ -4,6 +4,7 @@ const Sequelize = require('sequelize');
 
 
 const AdminModel = require("../models/admin");
+const CarSizeModel = require("../models/car-size");
 const CustomerModel = require("../models/customer");
 const DriverModel = require("../models/driver");
 const VehicleModel = require("../models/vehicle");
@@ -26,6 +27,7 @@ const sequelize = new Sequelize("ez_car_ride", "root", "root1234", {
 // MODELS CREATIONS WITH SWQUELIZE
 
 const Admin = AdminModel(sequelize, Sequelize);
+const CarSize = CarSizeModel(sequelize, Sequelize);
 const Customer = CustomerModel(sequelize, Sequelize);
 const Driver = DriverModel(sequelize, Sequelize);
 const Vehicle = VehicleModel(sequelize, Sequelize);
@@ -50,6 +52,7 @@ Driver.hasMany(Vehicle);
 
 module.exports = {
     Admin,
+    CarSize,
     Customer,
     Driver,
     Vehicle
