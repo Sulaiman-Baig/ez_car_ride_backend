@@ -12,7 +12,9 @@ const VehicleModel = require("../models/vehicle");
 
 // SEQUELIZE CONNECTION
 
-const sequelize = new Sequelize("ez_car_ride", "root", "root1234", {
+// const sequelize = new Sequelize("ez_car_ride", "root", "root1234", {
+    
+const sequelize = new Sequelize("ez_car_ride", "root", "Akfh77ja", {
     host: "localhost",
     dialect: "mysql",
     // operatorsAliases: false,
