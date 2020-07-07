@@ -25,6 +25,7 @@ module.exports = (sequelize, type) => {
       email: type.STRING,
       password: type.STRING,
       isActive: type.BOOLEAN,
+      isAvailable: type.BOOLEAN,
       isApproved: type.BOOLEAN,
  
      

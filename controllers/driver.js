@@ -35,6 +35,7 @@ module.exports = {
                 carYear,
                 carSize,
                 carNumberPlate,
+                carSizeId
             } = req.body;
 
             Driver.findOne({
@@ -72,7 +73,8 @@ module.exports = {
                                 carYear: carYear,
                                 carSize: carSize,
                                 carNumberPlate: carNumberPlate,
-                                driverId: driver.id
+                                driverId: driver.id,
+                                carSizeId: carSizeId
                             })
                                 .then(() => {
                                     return res.status(http_status_codes.CREATED).json({ message: 'Driver is Created and his Car is registered Successfully' });

@@ -40,6 +40,9 @@ const Vehicle = VehicleModel(sequelize, Sequelize);
 Vehicle.belongsTo(Driver);
 Driver.hasMany(Vehicle);
 
+Vehicle.belongsTo(CarSize);
+CarSize.hasMany(Vehicle);
+
 //TO UPDATE SCHEMA
 
 // sequelize.sync({ alter: true }).then(() => {
