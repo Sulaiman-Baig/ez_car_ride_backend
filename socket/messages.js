@@ -6,13 +6,17 @@ module.exports = function (io) {
             data.driver.forEach(driver => {
                 io.emit(driver.id, data.customer);
             });
-            // io.emit('refreshPage', {});
             console.log('socket is listening to send-data-to-drivers');
             console.log(data);
-
-
         });
 
-      
+
+
+        socket.on('sharelatlongcontinously', data => {
+
+            io.emit('getlatlongcontinously' + data.customerId, data);           
+        });
+
+
     })
 } 
