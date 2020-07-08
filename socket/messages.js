@@ -10,11 +10,9 @@ module.exports = function (io) {
             console.log(data);
         });
 
-
-
         socket.on('sharelatlongcontinously', data => {
-
-            io.emit('getlatlongcontinously' + data.customerId, data);           
+            console.log('sharelatlongcontinously is working');
+            io.emit('getlatlongcontinously' + data.customerId, data);
         });
 
 
