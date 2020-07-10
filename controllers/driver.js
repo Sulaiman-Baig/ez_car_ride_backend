@@ -13,6 +13,7 @@ module.exports = {
 
     async createDriver(req, res, next) {
         try {
+         
             const {
                 firstName,
                 lastName,
@@ -20,15 +21,12 @@ module.exports = {
                 city,
                 country,
                 phoneNo,
-                imageURl,
                 frontImageURl,
                 backImageURl,
-                cardName,
                 cardNumber,
-                csv,
-                expirayYear,
-                expirayMonth,
                 email,
+                lattitude,
+                longitude,
                 password,
                 carName,
                 carModel,
@@ -54,14 +52,11 @@ module.exports = {
                         city: city,
                         country: country,
                         phoneNo: phoneNo,
-                        imageURl: imageURl,
+                        lattitude: lattitude,
+                        longitude: longitude,
                         backImageURl: backImageURl,
                         frontImageURl: frontImageURl,
-                        cardName: cardName,
                         cardNumber: cardNumber,
-                        csv: csv,
-                        expirayYear: expirayYear,
-                        expirayMonth: expirayMonth,
                         password: hashedpassword.generate(password),
                         is_active: false,
                         email: email
