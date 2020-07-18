@@ -202,9 +202,12 @@ module.exports = {
                     id: id
                 }
             })
-            return res.status(http_status_codes.OK).json({
-                message: "Cart Info Updated sussessfully"
-            })
+            .then((updatedCustomer) => {
+                return res.status(http_status_codes.OK).json({
+                    message: "Cart Info Updated sussessfully", customer: updatedCustomer
+                })
+            });
+           
         } catch (error) {
             return res.status(http_status_codes.INTERNAL_SERVER_ERROR).json({
                 message: "an error occured"
