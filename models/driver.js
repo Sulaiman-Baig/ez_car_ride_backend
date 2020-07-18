@@ -19,6 +19,8 @@ module.exports = (sequelize, type) => {
       cardNumber: type.STRING,
       email: type.STRING,
       password: type.STRING,
+      rating: type.INTEGER,
+      balance: type.INTEGER,
       isActive: type.BOOLEAN,
       isAvailable: type.BOOLEAN,
       isApproved: type.BOOLEAN,

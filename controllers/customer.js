@@ -181,6 +181,37 @@ module.exports = {
         }
     },
 
+    async updateCustomerCardInfo(req, res, next) {
+        try {
+            id = req.params.id;
+            const {
+                cardName,
+                cardNumber,
+                csv,
+                expirayYear,
+                expirayMonth,
+            } = req.body
+            Customer.update({
+                cardName: cardName,
+                cardNumber: cardNumber,
+                csv: csv,
+                expirayYear: expirayYear,
+                expirayMonth: expirayMonth
+            }, {
+                where: {
+                    id: id
+                }
+            })
+            return res.status(http_status_codes.OK).json({
+                message: "Cart Info Updated sussessfully"
+            })
+        } catch (error) {
+            return res.status(http_status_codes.INTERNAL_SERVER_ERROR).json({
+                message: "an error occured"
+            })
+        }
+    },
+
     async updatePassword(req, res, next) {
         try {
             id = req.params.id;

@@ -89,7 +89,8 @@ module.exports = {
         Driver.findOne({
             where: {
                 email: req.body.email
-            }
+            },
+            include: [{model: Vehicle}]
         }).then(isDriverExist => {
             if (isDriverExist) {
                 const verify_password = hashedpassword.verify(
@@ -133,6 +134,18 @@ module.exports = {
         } catch (error) {
             return res.status(http_status_codes.INTERNAL_SERVER_ERROR).json({
                 message: "Error occured in fetching single driver"
+            })
+        }
+    },
+
+    async getBalance(req, res, next) {
+        try {
+            const driver = await Driver.findOne({ where: { id: req.params.id }, attributes: ['id', 'balance', 'firstName'] });
+            return res.status(http_status_codes.OK).json(driver);
+
+        } catch (error) {
+            return res.status(http_status_codes.INTERNAL_SERVER_ERROR).json({
+                message: "Error occured in fetching balance"
             })
         }
     },
