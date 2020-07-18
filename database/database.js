@@ -51,6 +51,8 @@ sequelize.sync({ alter: true }).then(() => {
     console.log(`Database & tables created!`);
 });
 
+// test changing
+
 
 
 // EXPORT MODELS
