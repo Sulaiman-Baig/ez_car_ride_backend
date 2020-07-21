@@ -2,8 +2,8 @@ module.exports = function(io) {
     io.on('connection', socket => {
       socket.on('join_chat', params => {
           console.log(params);
-        socket.join(params.room1);
-        socket.join(params.room2);
+        socket.join(params.driverId);
+        socket.join(params.customerId);
       });
   
       socket.on('start_typing', data => {

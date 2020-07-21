@@ -14,6 +14,11 @@ module.exports = function (io) {
             console.log('sharelatlongcontinously is working');
             io.emit('getlatlongcontinously' + data.customerId, data);
         });
+            
+        socket.on('refresh', data => {
+            io.emit('refreshPage'  + data.senderId + data.receiverId, {message: data.message});
+        });
+
 
 
     })
