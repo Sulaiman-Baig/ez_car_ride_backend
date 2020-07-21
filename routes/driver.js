@@ -13,6 +13,6 @@ router.post('/update/:id', driverController.updateDriver);
  router.get('/get-balance/:id' , driverController.getBalance);
  router.post('/is-driver-exist-by-email' , driverController.isDriverExistByEmail);
  router.get('/getall' , driverController.getAll);
- router.post('/location-updator' , driverController.locupd);
+ router.post('/locationupdator' , driverController.locupd);
 
 module.exports = router;
