@@ -63,7 +63,8 @@ module.exports = {
             });
 
             driver.update({
-                balance: balanceToUpdate
+                balance: balanceToUpdate,
+                isPaymentRequested: false
             });
 
             return res.status(http_status_codes.OK).json({
