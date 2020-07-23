@@ -8,6 +8,7 @@ const CarSizeModel = require("../models/car-size");
 const CustomerModel = require("../models/customer");
 const DriverModel = require("../models/driver");
 const VehicleModel = require("../models/vehicle");
+const WithdrawModel = require("../models/withdraw");
 
 
 // SEQUELIZE CONNECTION
@@ -33,6 +34,7 @@ const CarSize = CarSizeModel(sequelize, Sequelize);
 const Customer = CustomerModel(sequelize, Sequelize);
 const Driver = DriverModel(sequelize, Sequelize);
 const Vehicle = VehicleModel(sequelize, Sequelize);
+const Withdraw = WithdrawModel(sequelize, Sequelize);
 
 
 
@@ -44,6 +46,10 @@ Driver.hasMany(Vehicle);
 
 Vehicle.belongsTo(CarSize);
 CarSize.hasMany(Vehicle);
+
+Withdraw.belongsTo(Driver);
+Driver.hasMany(Withdraw);
+
 
 //TO UPDATE SCHEMA
 
@@ -62,6 +68,7 @@ module.exports = {
     CarSize,
     Customer,
     Driver,
-    Vehicle
+    Vehicle,
+    Withdraw
 
 }; 

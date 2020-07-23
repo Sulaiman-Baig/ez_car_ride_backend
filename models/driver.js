@@ -24,6 +24,7 @@ module.exports = (sequelize, type) => {
       isActive: type.BOOLEAN,
       isAvailable: type.BOOLEAN,
       isApproved: type.BOOLEAN,
+      isPaymentRequested: type.BOOLEAN
  
      
     });

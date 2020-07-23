@@ -59,7 +59,9 @@ module.exports = {
                         cardNumber: cardNumber,
                         password: hashedpassword.generate(password),
                         is_active: false,
-                        email: email
+                        email: email,
+                        isPaymentRequested: false,
+                        balance: 0
                     })
                         .then((driver) => {
                             Vehicle.create({

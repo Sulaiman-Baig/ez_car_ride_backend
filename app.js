@@ -15,6 +15,7 @@ var customerRouter = require('./routes/customer');
 var carSizeRouter = require('./routes/car-size');
 var driverRouter = require('./routes/driver');
 var vehicleRouter = require('./routes/vehicle');
+var withdrawRouter = require('./routes/withdraw');
 
 
 var app = express();
@@ -57,6 +58,7 @@ app.use('/booking', bookingRouter);
 app.use('/car-size', carSizeRouter);
 app.use('/driver', driverRouter);
 app.use('/vehicle', vehicleRouter);
+app.use('/withdraw', withdrawRouter);
 
 
 // catch 404 and forward to error handler
