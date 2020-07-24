@@ -57,7 +57,7 @@ module.exports = {
         try {
             withdrawId = req.params.id;
             const withdraw = await Withdraw.findOne({ where: { id: withdrawId }, attributes: ['id', 'driverId', 'amount'] });
-            const driver = await Driver.findOne({ where: { id: withdraw.driverId } });
+            const driver = await Driver.findOne({ where: { id: withdraw.driverId }, include: { all: true } });
             let balanceToUpdate = driver.balance - withdraw.amount;
             Withdraw.update({
                 isPaid: true
@@ -73,7 +73,8 @@ module.exports = {
             });
 
             return res.status(http_status_codes.OK).json({
-                message: "Withdraw sussessfully"
+                message: "Withdraw sussessfully",
+                driver: driver
             })
         } catch (error) {
             return res.status(http_status_codes.INTERNAL_SERVER_ERROR).json({
