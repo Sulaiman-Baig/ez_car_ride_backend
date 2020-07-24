@@ -25,9 +25,13 @@ module.exports = {
                 const withdraw = await Withdraw.create({
                     amount: amount,
                     driverId: driverId,
-                    isPaid: false,
-                    isPaymentRequested: true
+                    isPaid: false
                 });
+                if (withdraw) {
+                    driver.update({
+                        isPaymentRequested: true
+                    });
+                }
                 return res.status(http_status_codes.OK).json({ message: 'Withdraw Requested Successfully' });
             }
         } catch (err) {
