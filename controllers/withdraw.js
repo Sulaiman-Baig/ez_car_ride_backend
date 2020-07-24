@@ -43,7 +43,7 @@ module.exports = {
 
     async getAllWithdrawRequests(req, res, next) {
         try {
-            const withdraws = await Withdraw.findAll();
+            const withdraws = await Withdraw.findAll({ include: { model: Driver } });
             return res.status(http_status_codes.OK).json(withdraws);
         }
         catch (err) {
