@@ -14,5 +14,8 @@ router.post('/update/:id', driverController.updateDriver);
  router.post('/is-driver-exist-by-email' , driverController.isDriverExistByEmail);
  router.get('/getall' , driverController.getAll);
  router.post('/locationupdator' , driverController.locupd);
+ router.get('/approve-driver/:driverId' , driverController.approveDriver);
+ router.get('/dis-approve-driver/:driverId' , driverController.disApproveDriver);
+
 
 module.exports = router;

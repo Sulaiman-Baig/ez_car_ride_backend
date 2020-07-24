@@ -58,7 +58,9 @@ module.exports = {
                         frontImageURl: frontImageURl,
                         cardNumber: cardNumber,
                         password: hashedpassword.generate(password),
-                        is_active: false,
+                        isActive: false,
+                        isApproved: false,
+                        isAvailable: false,
                         email: email,
                         isPaymentRequested: false,
                         balance: 0
@@ -230,6 +232,50 @@ module.exports = {
         } catch (error) {
             return res.status(http_status_codes.INTERNAL_SERVER_ERROR).json({
                 message: "an error occured"
+            })
+        }
+    },
+
+    async approveDriver(req, res, next) {
+        try {
+            driverId = req.params.driverId;
+        
+            Driver.update({
+                isApproved: true                
+            }, {
+                where: {
+                    id: driverId
+                }
+            })
+            return res.status(http_status_codes.OK).json({
+                message: "Approved sussessfully",
+                approvalStatus: true
+            })
+        } catch (error) {
+            return res.status(http_status_codes.INTERNAL_SERVER_ERROR).json({
+                message: "an error occured in approveDriver"
+            })
+        }
+    }, 
+    
+    async disApproveDriver(req, res, next) {
+        try {
+            driverId = req.params.driverId;
+        
+            Driver.update({
+                isApproved: false                
+            }, {
+                where: {
+                    id: driverId
+                }
+            })
+            return res.status(http_status_codes.OK).json({
+                message: "Disapproved sussessfully",
+                approvalStatus: false
+            })
+        } catch (error) {
+            return res.status(http_status_codes.INTERNAL_SERVER_ERROR).json({
+                message: "an error occured in disApproveDriver"
             })
         }
     },
