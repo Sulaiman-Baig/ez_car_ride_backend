@@ -9,6 +9,8 @@ router.post('/update/:id', driverController.updateDriver);
  router.post('/updatepassword/:id' , driverController.updatePassword);
  router.post('/resetpassword/:id' , driverController.resetPassword);
  router.post('/mailsend' , driverController.resetpassword_usingmail);
+ router.post('/change-availability-status/:driverId' , driverController.changeStatus);
+ router.post('/rating/:driverId' , driverController.rating);
  router.get('/getbyId/:id' , driverController.getbyId);
  router.get('/get-balance/:id' , driverController.getBalance);
  router.post('/is-driver-exist-by-email' , driverController.isDriverExistByEmail);

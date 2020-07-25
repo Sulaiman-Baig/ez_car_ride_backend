@@ -63,7 +63,9 @@ module.exports = {
                         isAvailable: false,
                         email: email,
                         isPaymentRequested: false,
-                        balance: 0
+                        balance: 0,
+                        rating: 0,
+                        rating_no: 0
                     })
                         .then((driver) => {
                             Vehicle.create({
@@ -236,12 +238,94 @@ module.exports = {
         }
     },
 
+    async changeStatus(req, res, next) {
+        try {
+            driverId = req.params.driverId;
+            const {
+                isActive
+            } = req.body
+            Driver.update({
+                isActive: isActive
+            }, {
+                where: {
+                    id: driverId
+                }
+            })
+            return res.status(http_status_codes.OK).json({
+                message: "Status Updated sussessfully"
+            })
+        } catch (error) {
+            return res.status(http_status_codes.INTERNAL_SERVER_ERROR).json({
+                message: "an error occured"
+            })
+        }
+    },
+
+    async rating(req, res, next) {
+        
+        try {
+            driverId = req.params.driverId;
+            const driver = await Driver.findOne({ where: { id: req.params.driverId }, attributes: ['id', 'rating', 'rating_no'] });
+            const {
+                rating
+            } = req.body;
+
+            if (driver.rating_no === 0) {
+
+                Driver.update({
+                    rating: rating,
+                    rating_no: 1
+                }, {
+                    where: {
+                        id: driverId
+                    }
+                });
+                return res.status(http_status_codes.OK).json({
+                    message: "Rated Successfully"
+                })
+
+            } else if (driver.rating_no === 1) {
+
+                Driver.update({
+                    rating_no: (driver.rating_no + 1),
+                    rating: driver.rating + rating
+                }, {
+                    where: {
+                        id: driverId
+                    }
+                });
+                return res.status(http_status_codes.OK).json({
+                    message: "Rated Successfully"
+                })
+
+            } else if (driver.rating_no > 1) {
+               
+                Driver.update({
+                    rating_no: driver.rating_no + 1,
+                    rating: ((driver.rating * driver.rating_no) + rating) / (driver.rating_no + 1)
+                }, {
+                    where: {
+                        id: driverId
+                    }
+                });
+                return res.status(http_status_codes.OK).json({
+                    message: "Rated Successfully"
+                })
+            }
+
+        } catch (error) {
+            return res.status(http_status_codes.INTERNAL_SERVER_ERROR).json({
+                message: "an error occured"
+            })
+        }
+    },
+
     async approveDriver(req, res, next) {
         try {
             driverId = req.params.driverId;
-        
+
             Driver.update({
-                isApproved: true                
+                isApproved: true
             }, {
                 where: {
                     id: driverId
@@ -256,14 +340,14 @@ module.exports = {
                 message: "an error occured in approveDriver"
             })
         }
-    }, 
-    
+    },
+
     async disApproveDriver(req, res, next) {
         try {
             driverId = req.params.driverId;
-        
+
             Driver.update({
-                isApproved: false                
+                isApproved: false
             }, {
                 where: {
                     id: driverId

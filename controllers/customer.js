@@ -181,6 +181,29 @@ module.exports = {
         }
     },
 
+    async changeStatus(req, res, next) {
+        try {
+            customerId = req.params.customerId;
+            const {
+                isActive
+            } = req.body
+            Customer.update({
+                isActive: isActive
+            }, {
+                where: {
+                    id: customerId
+                }
+            })
+            return res.status(http_status_codes.OK).json({
+                message: "Status Updated sussessfully"
+            })
+        } catch (error) {
+            return res.status(http_status_codes.INTERNAL_SERVER_ERROR).json({
+                message: "an error occured"
+            })
+        }
+    },
+
     async updateCustomerCardInfo(req, res, next) {
         try {
             id = req.params.id;

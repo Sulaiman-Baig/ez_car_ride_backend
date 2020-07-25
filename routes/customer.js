@@ -10,6 +10,7 @@ router.post('/update-card-info/:id', customerController.updateCustomerCardInfo);
  router.post('/updatepassword/:id' , customerController.updatePassword);
  router.post('/resetpassword/:id' , customerController.resetPassword);
  router.post('/mailsend' , customerController.resetpassword_usingmail);
+ router.post('/change-availability-status/:customerId' , customerController.changeStatus);
  router.get('/getbyId/:id' , customerController.getbyId);
  router.post('/is-customer-exist-by-email' , customerController.isCustomerExistByEmail);
  router.get('/getall' , customerController.getAll);
