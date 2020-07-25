@@ -288,7 +288,7 @@ module.exports = {
 
                 Driver.update({
                     rating_no: (driver.rating_no + 1),
-                    rating: driver.rating + rating
+                    rating: (driver.rating + rating) / 2
                 }, {
                     where: {
                         id: driverId
