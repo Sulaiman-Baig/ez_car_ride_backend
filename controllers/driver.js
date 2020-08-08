@@ -268,7 +268,7 @@ module.exports = {
     },
 
     async rating(req, res, next) {
-        
+
         try {
             driverId = req.params.driverId;
             const driver = await Driver.findOne({ where: { id: req.params.driverId }, attributes: ['id', 'rating', 'rating_no'] });
@@ -305,7 +305,7 @@ module.exports = {
                 })
 
             } else if (driver.rating_no > 1) {
-               
+
                 Driver.update({
                     rating_no: driver.rating_no + 1,
                     rating: ((driver.rating * driver.rating_no) + rating) / (driver.rating_no + 1)
@@ -370,28 +370,28 @@ module.exports = {
         }
     },
 
-    async updatePassword(req, res, next) {
-        try {
-            id = req.params.id;
-            const {
-                password
-            } = req.body
-            Driver.update({
-                password: hashedpassword.generate(password)
-            }, {
-                where: {
-                    id: id
-                }
-            })
-            return res.status(http_status_codes.OK).json({
-                message: "Updated sussessfully"
-            })
-        } catch (error) {
-            return res.status(http_status_codes.INTERNAL_SERVER_ERROR).json({
-                message: "an error occured"
-            })
-        }
-    },
+    // async updatePassword(req, res, next) {
+    //     try {
+    //         id = req.params.id;
+    //         const {
+    //             password
+    //         } = req.body
+    //         Driver.update({
+    //             password: hashedpassword.generate(password)
+    //         }, {
+    //             where: {
+    //                 id: id
+    //             }
+    //         })
+    //         return res.status(http_status_codes.OK).json({
+    //             message: "Updated sussessfully"
+    //         })
+    //     } catch (error) {
+    //         return res.status(http_status_codes.INTERNAL_SERVER_ERROR).json({
+    //             message: "an error occured"
+    //         })
+    //     }
+    // },
 
     async resetPassword(req, res, next) {
         try {
@@ -469,5 +469,9 @@ module.exports = {
             res.json("Some Error Occured!");
         });
     }
+
+   
+
+  
 
 };
