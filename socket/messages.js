@@ -20,6 +20,14 @@ module.exports = function (io) {
             io.emit('refreshPage' + data.room1 + data.room2, { message: data.message });
         });
 
+        socket.on('startbooking', data => {
+            io.emit('bookingstarted' + data.driverId + data.customerId, { message: data.message });
+        });
+
+        socket.on('endbooking', data => {
+            io.emit('bookingended' + data.driverId + data.customerId, { message: data.message });
+        });
+
 
 
     })
