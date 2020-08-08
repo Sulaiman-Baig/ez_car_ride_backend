@@ -1,24 +1,26 @@
 var express = require('express');
 const {
-    Customer    
+    Customer
 } = require('../database/database');
 var router = express.Router();
 const customerController = require('../controllers/customer');
 const isAuth = require('../middleware/check-auth');
 const hashedpassword = require("password-hash");
+const nodemailer = require("nodemailer");
+var generator = require('generate-password');
 
 router.post('/create', customerController.createCustomer);
 router.post('/signin', customerController.signInCustomer);
 router.post('/update/:id', customerController.updateCustomer);
 router.post('/update-card-info/:id', customerController.updateCustomerCardInfo);
-//  router.post('/updatepassword/:id' , customerController.updatePassword);
- router.post('/resetpassword/:id' , customerController.resetPassword);
- router.post('/mailsend' , customerController.resetpassword_usingmail);
- router.post('/change-availability-status/:customerId' , customerController.changeStatus);
- router.get('/getbyId/:id' , customerController.getbyId);
- router.post('/is-customer-exist-by-email' , customerController.isCustomerExistByEmail);
- router.get('/getall' , customerController.getAll);
- router.post("/updatepassword/:id", (req, res, next) => {
+// router.post('/updatepassword/:id' , customerController.updatePassword);
+router.post('/resetpassword/:id', customerController.resetPassword);
+router.post('/mailsend', customerController.resetpassword_usingmail);
+router.post('/change-availability-status/:customerId', customerController.changeStatus);
+router.get('/getbyId/:id', customerController.getbyId);
+router.post('/is-customer-exist-by-email', customerController.isCustomerExistByEmail);
+router.get('/getall', customerController.getAll);
+router.post("/updatepassword/:id", (req, res, next) => {
     Customer.update({
         password: hashedpassword.generate(req.body.password),
     }, {
@@ -56,8 +58,8 @@ router.post("/forgot", (req, res, next) => {
             var transporter = nodemailer.createTransport({
                 service: 'gmail',
                 auth: {
-                    user: 'dareme.coliseum@gmail.com',
-                    pass: 'abuzar1047'
+                    user: 'ezcarride@gmail.com',
+                    pass: 'Elizabeth#2020'
                 }
             });
 
