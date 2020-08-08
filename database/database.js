@@ -6,6 +6,7 @@ const Sequelize = require('sequelize');
 const AdminModel = require("../models/admin");
 const BookingModel = require("../models/booking");
 const CarSizeModel = require("../models/car-size");
+const ComissionModel = require("../models/comission");
 const CustomerModel = require("../models/customer");
 const DriverModel = require("../models/driver");
 const VehicleModel = require("../models/vehicle");
@@ -33,6 +34,7 @@ const sequelize = new Sequelize("ez_car_ride", "root", "Akfh77ja", {
 const Admin = AdminModel(sequelize, Sequelize);
 const Booking = BookingModel(sequelize, Sequelize);
 const CarSize = CarSizeModel(sequelize, Sequelize);
+const Comission = ComissionModel(sequelize, Sequelize);
 const Customer = CustomerModel(sequelize, Sequelize);
 const Driver = DriverModel(sequelize, Sequelize);
 const Vehicle = VehicleModel(sequelize, Sequelize);
@@ -76,6 +78,7 @@ module.exports = {
     Admin,
     Booking,
     CarSize,
+    Comission,
     Customer,
     Driver,
     Vehicle,

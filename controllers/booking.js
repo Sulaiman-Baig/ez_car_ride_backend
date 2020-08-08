@@ -3,7 +3,8 @@ const sequelize = require("sequelize");
 const op = sequelize.Op;
 const {
     Booking,
-    Driver
+    Driver,
+    Comission
 } = require('../database/database');
 
 module.exports = {
@@ -61,8 +62,9 @@ module.exports = {
             });
 
             if (booking) {
+                const comissions = await Comission.findAll();
                 const driver = await Driver.findOne({ where: { id: driverId } });
-                let balanceToUpdate = driver.balance + (booking.cost * 0.8);
+                let balanceToUpdate = driver.balance + (booking.cost * comissions[0].customerComissionRate);
                 driver.update({
                     balance: balanceToUpdate
                 });
