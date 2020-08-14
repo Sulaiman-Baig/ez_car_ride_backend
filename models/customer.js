@@ -21,7 +21,9 @@ module.exports = (sequelize, type) => {
       expirayMonth: type.STRING,
       email: type.STRING,
       password: type.STRING,
-      isActive: type.BOOLEAN    
+      isActive: type.BOOLEAN,
+      rating: type.DOUBLE,
+      rating_no: type.DOUBLE,    
     });
   };
   

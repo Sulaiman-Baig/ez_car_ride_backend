@@ -261,6 +261,65 @@ module.exports = {
         }
     },
 
+    async rating(req, res, next) {
+
+        try {
+            customerId = req.params.customerId;
+            const customer = await Customer.findOne({ where: { id: req.params.customerId }, attributes: ['id', 'rating', 'rating_no'] });
+            const {
+                rating
+            } = req.body;
+
+            if (customer.rating_no === 0) {
+
+                Customer.update({
+                    rating: rating,
+                    rating_no: 1
+                }, {
+                    where: {
+                        id: customerId
+                    }
+                });
+                return res.status(http_status_codes.OK).json({
+                    message: "Rated Successfully"
+                })
+
+            } else if (customer.rating_no === 1) {
+
+                Customer.update({
+                    rating_no: (customer.rating_no + 1),
+                    rating: (customer.rating + rating) / 2
+                }, {
+                    where: {
+                        id: customerId
+                    }
+                });
+                return res.status(http_status_codes.OK).json({
+                    message: "Rated Successfully"
+                })
+
+            } else if (customer.rating_no > 1) {
+
+                Customer.update({
+                    rating_no: customer.rating_no + 1,
+                    rating: ((customer.rating * customer.rating_no) + rating) / (customer.rating_no + 1)
+                }, {
+                    where: {
+                        id: customerId
+                    }
+                });
+                return res.status(http_status_codes.OK).json({
+                    message: "Rated Successfully"
+                })
+            }
+
+        } catch (error) {
+            return res.status(http_status_codes.INTERNAL_SERVER_ERROR).json({
+                message: "an error occured"
+            })
+        }
+    },
+
     async resetPassword(req, res, next) {
         try {
             const customerId = req.params.id;

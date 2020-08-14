@@ -14,6 +14,7 @@ router.post('/signin', customerController.signInCustomer);
 router.post('/update/:id', customerController.updateCustomer);
 router.post('/update-card-info/:id', customerController.updateCustomerCardInfo);
 // router.post('/updatepassword/:id' , customerController.updatePassword);
+router.post('/rating/:customerId', customerController.rating);
 router.post('/resetpassword/:id', customerController.resetPassword);
 router.post('/mailsend', customerController.resetpassword_usingmail);
 router.post('/change-availability-status/:customerId', customerController.changeStatus);
