@@ -9,7 +9,7 @@ const hashedpassword = require("password-hash");
 const nodemailer = require("nodemailer");
 var generator = require('generate-password');
 
-router.post('/create', driverController.createDriver,);
+router.post('/create', driverController.createDriver);
 router.post('/signin', driverController.signinDriver);
 router.post('/update/:id', driverController.updateDriver);
 // router.post('/updatepassword/:id' , driverController.updatePassword);

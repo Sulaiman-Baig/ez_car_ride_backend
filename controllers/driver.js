@@ -36,7 +36,8 @@ module.exports = {
                 carSizeId,
                 licencePlateFront,
                 licencePlateBack,
-                socialSecurityNumber
+                socialSecurityNumber,
+                workShift
             } = req.body;
 
             Driver.findOne({
@@ -71,7 +72,8 @@ module.exports = {
                         rating_no: 0,
                         licencePlateFront: licencePlateFront,
                         licencePlateBack: licencePlateBack,
-                        socialSecurityNumber: socialSecurityNumber
+                        socialSecurityNumber: socialSecurityNumber,
+                        workShift: workShift
                     })
                         .then((driver) => {
                             Vehicle.create({

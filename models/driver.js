@@ -22,6 +22,7 @@ module.exports = (sequelize, type) => {
       licencePlateFront: type.STRING,
       licencePlateBack: type.STRING,
       socialSecurityNumber: type.STRING,
+      workShift: type.STRING,
       rating: type.DOUBLE,
       rating_no: type.DOUBLE,
       balance: type.INTEGER,
